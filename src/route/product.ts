@@ -12,7 +12,7 @@ interface CustomRequest extends Request {
   product: any;
 }
 interface CustomResponse extends Response {
-  product?: IProduct;
+  product?: any;
 }
 
 const router = Router();
@@ -52,8 +52,22 @@ router.post("/", async (req: Request, res: Response) => {
   }
 });
 
-router.patch("/:id", getProduct, (req: Request, res: Response) => {
-  res.send("patcg");
+router.patch("/:id", getProduct, async (req: Request, res: CustomResponse) => {
+  if (req.body.name != null) {
+    res.product.name = req.body.name;
+  }
+  if (req.body.price != null) {
+    res.product.price = req.body.price;
+  }
+  if (req.body.unit != null) {
+    res.product.unit = req.body.unit;
+  }
+  try {
+    const updateedProduct = await res.product.save();
+    return res.json(updateedProduct);
+  } catch (error: any) {
+    return res.status(400).json({ message: error.message });
+  }
 });
 
 router.delete("/:id", getProduct, async (req: Request, res: Response) => {
