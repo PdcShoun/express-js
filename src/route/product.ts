@@ -12,7 +12,7 @@ interface CustomRequest extends Request {
   product: any;
 }
 interface CustomResponse extends Response {
-  product?: any;
+  product?: IProduct;
 }
 
 const router = Router();
