@@ -5,7 +5,7 @@ import {
   getProductByName,
   deleteProductById,
   IProduct,
-} from "../models/products";
+} from "../db/products";
 import db from "../database";
 
 interface CustomRequest extends Request {
@@ -19,9 +19,7 @@ const router = Router();
 db;
 router.get("/", async (req: Request, res: Response) => {
   try {
-    console.log("test");
     const products = await Product.find();
-    console.log(products);
     res.json({
       product: products,
     });
@@ -67,7 +65,11 @@ router.delete("/:id", getProduct, async (req: Request, res: Response) => {
   }
 });
 
-async function getProduct(req: Request, res: CustomResponse, next: NextFunction) {
+async function getProduct(
+  req: Request,
+  res: CustomResponse,
+  next: NextFunction
+) {
   let product;
   try {
     product = await Product.findById(req.params.id);
