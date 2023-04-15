@@ -1,16 +1,12 @@
-import { Router, Request, Response, NextFunction, Express } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import {
   Product,
   createProduct,
   getProductByName,
   deleteProductById,
-  IProduct,
 } from "../db/products";
 import db from "../database";
 
-interface CustomRequest extends Request {
-  product: any;
-}
 interface CustomResponse extends Response {
   product?: any;
 }
