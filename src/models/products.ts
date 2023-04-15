@@ -18,6 +18,10 @@ const productSchema = new Schema<IProduct>({
   unit: String,
 });
 
-const Product = model<IProduct>("Product", productSchema);
-
-export default Product;
+export const Product = model<IProduct>("Product", productSchema);
+export const getProducts = Product.find();
+export const getProductById = (id: string) => Product.findById(id);
+export const createProduct = (values: IProduct) =>
+  new Product(values).save().then((prod) => prod.toObject());
+export const getProductByName = (name: string) => Product.findOne({ name });
+export const deleteProductById = (id: string) => Product.findOneAndDelete({ _id: id });

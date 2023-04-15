@@ -1,20 +1,26 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import config from "./config";
-import products from './routes/products'
-import db from './database'
+import products from "./routes/product";
+import type { ErrorRequestHandler } from "express";
+
+import db from "./database";
 
 dotenv.config();
 const app: Express = express();
 const port = config.PORT;
 
 // db
+const errorHandler: ErrorRequestHandler = (err, req, res, next) => {};
+
+app.use(express.json());
+app.use(errorHandler);
+app.use("/api/products", products);
 app.get("/", (req: Request, res: Response) => {
-  res.json({
+  return res.json({
     Hello: "world",
   });
 });
-app.use("/api/products", products)
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is at http://localhost:${port}`);
