@@ -24,4 +24,6 @@ export const getProductById = (id: string) => Product.findById(id);
 export const createProduct = (values: IProduct) =>
   new Product(values).save().then((prod) => prod.toObject());
 export const getProductByName = (name: string) => Product.findOne({ name });
-export const deleteProductById = (id: string) => Product.findOneAndDelete({ _id: id });
+export const deleteProductById = (id: string) =>
+  Product.findOneAndDelete({ _id: id });
+export { IProduct };

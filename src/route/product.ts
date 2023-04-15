@@ -1,30 +1,36 @@
 import { Router, Request, Response, NextFunction, Express } from "express";
-import type { ErrorRequestHandler } from "express";
 import {
   Product,
-  getProducts,
   createProduct,
   getProductByName,
   deleteProductById,
+  IProduct,
 } from "../models/products";
 import db from "../database";
+
+interface CustomRequest extends Request {
+  product: any;
+}
+interface CustomResponse extends Response {
+  product?: any;
+}
 
 const router = Router();
 db;
 router.get("/", async (req: Request, res: Response) => {
   try {
     console.log("test");
-    const products = await getProducts;
+    const products = await Product.find();
     console.log(products);
     res.json({
       product: products,
     });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
 });
 
-router.get("/:id", getProduct, (req: Request, res: Response) => {
+router.get("/:id", getProduct, (req: Request, res: CustomResponse) => {
   return res.status(201).json(res.product);
 });
 
@@ -43,8 +49,8 @@ router.post("/", async (req: Request, res: Response) => {
     });
     console.log(newProduct);
     res.status(201).json(newProduct);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
   }
 });
 
@@ -54,22 +60,23 @@ router.patch("/:id", getProduct, (req: Request, res: Response) => {
 
 router.delete("/:id", getProduct, async (req: Request, res: Response) => {
   try {
-    await deleteProductById(req.params.id)
+    await deleteProductById(req.params.id);
     return res.json({ message: `Delete ${req.params.id}` });
-  } catch (error) {
+  } catch (error: any) {
     return res.status(500).json({ message: error.message });
   }
 });
 
-async function getProduct(req: Request, res: Response, next: NextFunction) {
+async function getProduct(req: Request, res: CustomResponse, next: NextFunction) {
   let product;
   try {
     product = await Product.findById(req.params.id);
     console.log(product);
     if (!product) {
-      return res.status(404).json({ message: "Can not find product" });
+      const errorMessage = { message: "Can not find product" };
+      return res.status(404).json(errorMessage);
     }
-  } catch (error) {
+  } catch (error: any) {
     return res.status(500).json({ message: error.message });
   }
   res.product = product;

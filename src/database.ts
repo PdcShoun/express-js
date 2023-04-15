@@ -1,4 +1,4 @@
-import mongoose, { connect, connection } from "mongoose";
+import { connect, connection } from "mongoose";
 import config from "./config";
 
 const uri = config.DATABASE_URL;
